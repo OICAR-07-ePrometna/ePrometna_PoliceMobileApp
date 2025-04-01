@@ -1,5 +1,9 @@
 # e-Prometna Police Mobile App
 Mobile app for field police officer for ePrometna project for OICAR course
+
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/OICAR-07-ePrometna/ePrometna_PoliceMobileApp?utm_source=oss&utm_medium=github&utm_campaign=OICAR-07-ePrometna%2FePrometna_PoliceMobileApp&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)  ![Expo Badge](https://img.shields.io/badge/Expo-React%20Native-blue?style=flat-circle&logo=expo&logoColor=white&link=https://expo.dev)
+
+
 ## Expo setup
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
