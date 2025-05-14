@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Button, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import api from '@/services/api';
+import api from '@/services/axios';
 import Constants from 'expo-constants';
 
 export default function PingTest() {
