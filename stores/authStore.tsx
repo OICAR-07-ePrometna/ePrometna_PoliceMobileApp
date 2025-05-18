@@ -14,6 +14,7 @@ interface AuthState {
   error: string | null;
   
   login: (email: string, password: string, rememberDevice: boolean) => Promise<void>;
+  loginPolice: (token: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: () => Promise<boolean>;
   getUserRole: () => UserRole | undefined;
@@ -63,6 +64,46 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       
       if (error instanceof Error) {
         console.error('Login error:', error.message);
+        errorMessage = error.message;
+      }
+      
+      set({ error: errorMessage, loading: false });
+      throw new Error(errorMessage);
+    }
+  },
+
+  loginPolice: async (token: string) => {
+    set({ loading: true, error: null });
+    try {
+      const { accessToken, refreshToken, deviceToken } = await authService.loginPolice(token);
+      
+      console.log('Police login successful, received all tokens');
+      
+      if (!accessToken || !refreshToken || !deviceToken) {
+        throw new Error('Invalid response from server: missing tokens');
+      }
+    
+      const userData = tokenUtils.getUserFromToken(deviceToken);
+      
+      // Always store tokens for police login (treated as rememberDevice = true)
+      await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
+      
+      if (userData) {
+        await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
+      }
+      
+      set({
+        deviceToken,
+        accessToken,
+        refreshToken,
+        userData,
+        loading: false
+      });
+    } catch (error) {
+      let errorMessage = 'Police login failed';
+      
+      if (error instanceof Error) {
+        console.error('Police login error:', error.message);
         errorMessage = error.message;
       }
       
