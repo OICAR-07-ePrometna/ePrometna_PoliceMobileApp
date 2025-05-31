@@ -76,7 +76,6 @@ const PoliceLoginView: React.FC = () => {
   const handlePaste = async (text: string, index: number) => {
     // If pasted text is longer than a single character, it might be the full token
     if (text.length > 1) {
-      // Take only up to TOKEN_LENGTH characters
       const pastedToken = text.slice(0, TOKEN_LENGTH);
       
       // Fill in the token inputs
@@ -90,7 +89,6 @@ const PoliceLoginView: React.FC = () => {
       const focusIndex = Math.min(pastedToken.length, TOKEN_LENGTH - 1);
       inputRefs.current[focusIndex]?.focus();
     } else {
-      // Regular single character input
       handleInputChange(text, index);
     }
   };
