@@ -41,10 +41,17 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="pingtest"
+        name="userDetails"
         options={{
-          title: 'Ping',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="wifi" color={color} />,
+          title: 'Profil',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="logout"
+        options={{
+          title: 'Odjava',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="rectangle.portrait.and.arrow.right" color={color} />,
         }}
       />
     </Tabs>
