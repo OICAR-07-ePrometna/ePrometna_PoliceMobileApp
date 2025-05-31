@@ -72,51 +72,54 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  loginPolice: async (token: string) => {
-    set({ loading: true, error: null });
-    try {
-      const { accessToken, refreshToken, deviceToken } = await authService.loginPolice(token);
-      
-      console.log('Police login successful, received all tokens');
-      
-      if (!accessToken || !refreshToken || !deviceToken) {
-        throw new Error('Invalid response from server: missing tokens');
-      }
+loginPolice: async (token: string) => {
+  set({ loading: true, error: null });
+  try {
+    const { accessToken, refreshToken, deviceToken } = await authService.loginPolice(token);
+    console.log('Received deviceToken:', deviceToken);
     
-      const userData = tokenUtils.getUserFromToken(deviceToken);
-      
-      // Always store tokens for police login (treated as rememberDevice = true)
-      await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
-      
-      if (userData) {
-        await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
-      }
-      
-      set({
-        deviceToken,
-        accessToken,
-        refreshToken,
-        userData,
-        loading: false
-      });
-    } catch (error) {
-      let errorMessage = 'Police login failed';
-      
-      if (error instanceof Error) {
-        console.error('Police login error:', error.message);
-        errorMessage = error.message;
-      }
-      
-      set({ error: errorMessage, loading: false });
-      throw new Error(errorMessage);
+    if (!accessToken || !refreshToken || !deviceToken) {
+      throw new Error('Invalid response from server: missing tokens');
     }
-  },
+  
+    const userData = tokenUtils.getUserFromToken(deviceToken);
+    await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
+    
+    if (userData) {
+      await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
+    }
+  
+    // Force update the store state
+    set((state) => ({
+      ...state,
+      deviceToken: deviceToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      userData: userData,
+      loading: false,
+      error: null
+    }));
+  
+    console.log('Current secure store deviceToken:', get().deviceToken);
+    
+  } catch (error) {
+    let errorMessage = 'Police login failed';
+    
+    if (error instanceof Error) {
+      console.error('Police login error:', error.message);
+      errorMessage = error.message;
+    }
+    
+    set({ error: errorMessage, loading: false });
+    throw new Error(errorMessage);
+  }
+},
 
   logout: async () => {
     try {
       await authService.logoutDevice();
       await tokenUtils.clearTokens();
-      
+
       set({
         deviceToken: null,
         accessToken: null,

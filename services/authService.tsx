@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { getDeviceInfo } from '@/utilities/deviceUtils';
 import type { LoginDto } from '@/dtos/loginDto';
+import type { PoliceRegisterDto } from '@/dtos/policeRegisterDto';
 import type { ApiError } from '@/models/apiErrors';
 import apiClient, { safeInstance } from '@/services/axios';
 import axios from 'axios';
@@ -56,21 +57,17 @@ export async function loginPolice(token: string): Promise<MobileLoginResponse> {
     // Get device information
     const deviceInfo = await getDeviceInfo();
   
-    const loginPayload = {
-      token,
-      deviceInfo: {
-        platform: deviceInfo.platform,
-        brand: deviceInfo.brand,
-        modelName: deviceInfo.modelName,
-        deviceId: deviceInfo.deviceId,
-        osName: deviceInfo.osName,
-        osVersion: deviceInfo.osVersion,
-        appVersion: deviceInfo.appVersion,
-        buildVersion: deviceInfo.buildVersion
+    const loginPayload: PoliceRegisterDto = {
+      Code: token,
+      DeviceInfo: {
+        Platform: deviceInfo.platform,
+        Brand: deviceInfo.brand,
+        ModelName: deviceInfo.modelName,
+        DeviceID: deviceInfo.deviceId
       }
     };
     
-    const response = await safeInstance.post<MobileLoginResponse>('/auth/login-police', loginPayload);
+    const response = await safeInstance.post<MobileLoginResponse>('/auth/police/register', loginPayload);
     
     console.log('Police login tokens received:', {
       accessToken: response.data.accessToken ? 'Yes' : 'No',
@@ -83,10 +80,10 @@ export async function loginPolice(token: string): Promise<MobileLoginResponse> {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<ApiError>;
       console.error('Police login error response:', axiosError.response?.data);
-      throw new Error(axiosError.response?.data?.message || 'Login failed');
+      throw new Error(axiosError.response?.data?.message || 'Police login failed');
     }
-    console.error('Unexpected login error:', error);
-    throw new Error('An unexpected error occurred during login');
+    console.error('Unexpected police login error:', error);
+    throw new Error('An unexpected error occurred during police login');
   }
 }
 

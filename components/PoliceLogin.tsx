@@ -34,12 +34,10 @@ const PoliceLoginView: React.FC = () => {
   }, [tokenInputs]);
 
   const handleInputChange = (text: string, index: number) => {
-    // Ensure we only have one character per input
     if (text.length > 1) {
       text = text.charAt(text.length - 1);
     }
     
-    // Update the token at this position
     const newTokenInputs = [...tokenInputs];
     newTokenInputs[index] = text;
     setTokenInputs(newTokenInputs);
@@ -61,21 +59,19 @@ const PoliceLoginView: React.FC = () => {
   };
 
   const handleLogin = async () => {
-    // Validate token is complete
-    if (token.length !== TOKEN_LENGTH) {
-      Alert.alert('Error', 'Please enter all characters of your token');
-      return;
-    }
+  // Validate token is complete
+  if (token.length !== TOKEN_LENGTH) {
+    Alert.alert('Error', 'Please enter all characters of your token');
+    return;
+  }
 
-    try {
-      await loginPolice(token);
-      console.log('Police login successful');
-      router.push('/(tabs)/explore');
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Login failed';
-      Alert.alert('Login Error', errorMessage);
-    }
-  };
+  try {
+    await loginPolice(token);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Login failed';
+    Alert.alert('Login Error', errorMessage);
+  }
+};
 
   const handlePaste = async (text: string, index: number) => {
     // If pasted text is longer than a single character, it might be the full token

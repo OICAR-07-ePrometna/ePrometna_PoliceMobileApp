@@ -1,24 +1,10 @@
+// login.tsx - REMOVE the useEffect entirely
 import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import PoliceLoginView from '@/components/PoliceLogin';
-import { useRouter } from 'expo-router';
-import { useAuthStore } from '@/stores/authStore';
-import { useEffect } from 'react';
 
 export default function LoginScreen() {
-  const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
-  
-  // If user is already authenticated, redirect to tabs
-  useEffect(() => {
-    const checkAuth = async () => {
-      if (await isAuthenticated()) {
-        router.replace('/(tabs)');
-      }
-    };
-    
-    checkAuth();
-  }, []);
+  // Remove all the auth checking - let index.tsx handle it
   
   return (
     <View style={styles.container} accessibilityLabel="Login Screen">

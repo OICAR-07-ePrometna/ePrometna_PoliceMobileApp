@@ -1,35 +1,11 @@
-import { View, StyleSheet } from 'react-native';
-import React from 'react';
-import PoliceLoginView from '@/components/PoliceLogin';
-import { useRouter } from 'expo-router';
-import { useAuthStore } from '@/stores/authStore';
-import { useEffect } from 'react';
+import { Stack } from 'expo-router';
 
-export default function LoginScreen() {
-  const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
-  
-  // If user is already authenticated, redirect to tabs
-  useEffect(() => {
-    const checkAuth = async () => {
-      if (await isAuthenticated()) {
-        router.replace('/(tabs)');
-      }
-    };
-    
-    checkAuth();
-  }, []);
-  
+export default function RootLayout() {
   return (
-    <View style={styles.container} accessibilityLabel="Login Screen">
-      <PoliceLoginView />
-    </View>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-});

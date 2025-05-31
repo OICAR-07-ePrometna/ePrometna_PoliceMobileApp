@@ -13,7 +13,11 @@ import {
 export default function Index() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const authStore = useAuthStore();
+
+  const deviceToken = useAuthStore((state) => state.deviceToken);
+  const checkAuth = useAuthStore((state) => state.isAuthenticated);
+
+  console.log('Current device token forom secure store:', deviceToken);
 
   const forceLogout = async () => {
     console.log('Force logout initiated');
@@ -24,7 +28,7 @@ export default function Index() {
       await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
       await SecureStore.deleteItemAsync(USER_DATA_KEY);
     
-      authStore.logout();
+      useAuthStore.getState().logout();
       
       setIsAuthenticated(false);
       console.log('Force logout complete');
@@ -33,22 +37,29 @@ export default function Index() {
     }
   };
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const authenticated = await authStore.isAuthenticated();
-        console.log('isAuthenticated returned:', authenticated);
-        setIsAuthenticated(authenticated);
-      } catch (error) {
-        console.error('Auth check error:', error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    checkAuth();
-  }, []);
+useEffect(() => {
+
+  if (deviceToken) {
+    setIsAuthenticated(true);
+    setIsLoading(false);
+    return;
+  }
+  
+  const checkAuthStatus = async () => {
+    try {
+      const authenticated = await checkAuth();
+      console.log('isAuthenticated:', authenticated);
+      setIsAuthenticated(authenticated);
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  checkAuthStatus();
+}, [deviceToken]);
 
   if (isLoading) {
     return (
@@ -64,12 +75,10 @@ export default function Index() {
     );
   }
 
-  // If user is authenticated, redirect to the tabs
   if (isAuthenticated) {
     return <Redirect href="/(tabs)" />;
   }
 
-  // If not authenticated, redirect to login
   return <Redirect href="/login" />;
 }
 
