@@ -34,7 +34,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const { accessToken, refreshToken, deviceToken } = await authService.registerPolice(token);
-      console.log('Received deviceToken:', deviceToken);
       
       if (!accessToken || !refreshToken || !deviceToken) {
         throw new Error('Invalid response from server: missing tokens');
@@ -58,8 +57,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         error: null
       }));
     
-      console.log('Police registration complete, deviceToken stored:', get().deviceToken);
-      
     } catch (error) {
       let errorMessage = 'Police registration failed';
       
@@ -78,8 +75,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const { accessToken, refreshToken } = await authService.login({ email, password });
-      
-      console.log('Login successful, received tokens');
       
       if (!accessToken || !refreshToken) {
         throw new Error('Invalid response from server: missing tokens');

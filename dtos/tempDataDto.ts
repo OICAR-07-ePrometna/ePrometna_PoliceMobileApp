@@ -1,4 +1,4 @@
 export interface TempDataDto {
-    VehicleUuid: string;
-    DriverUuid: string;
+    vehicleUuid: string;
+    driverUuid: string;
 }

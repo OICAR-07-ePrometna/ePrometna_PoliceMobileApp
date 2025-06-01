@@ -15,8 +15,6 @@ import { scanQRCodeAndGetData, type ScannedDataResult } from '@/services/tempDat
 import { formatDate } from '@/utilities/formatDate';
 import { scanQrCodeStyles as styles } from '@/styles/scanQrCode';
 
-Dimensions.get('window');
-
 type ScannerState = 'requesting-permission' | 'scanning' | 'processing' | 'results' | 'error';
 
 interface QRScannerProps {
