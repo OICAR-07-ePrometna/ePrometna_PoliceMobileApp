@@ -13,11 +13,12 @@ interface AuthState {
   loading: boolean;
   error: string | null;
   
-  login: (email: string, password: string, rememberDevice: boolean) => Promise<void>;
-  loginPolice: (token: string) => Promise<void>;
+  registerPolice: (token: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: () => Promise<boolean>;
   getUserRole: () => UserRole | undefined;
+  isDeviceRegistered: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -28,28 +29,70 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   loading: false,
   error: null,
 
-  login: async (email: string, password: string, rememberDevice: boolean) => {
+  //Prvi login
+  registerPolice: async (token: string) => {
     set({ loading: true, error: null });
     try {
-      const { accessToken, refreshToken, deviceToken } = await authService.loginMobile({
-        email,
-        password
-      });
-      
-      console.log('Login successful, received all tokens');
+      const { accessToken, refreshToken, deviceToken } = await authService.registerPolice(token);
       
       if (!accessToken || !refreshToken || !deviceToken) {
         throw new Error('Invalid response from server: missing tokens');
       }
     
       const userData = tokenUtils.getUserFromToken(deviceToken);
+      await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
       
-      if (rememberDevice) {
-        await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
-        
-        if (userData) {
-          await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
-        }
+      if (userData) {
+        await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
+      }
+    
+      // Force update the store state
+      set((state) => ({
+        ...state,
+        deviceToken: deviceToken,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        userData: userData,
+        loading: false,
+        error: null
+      }));
+    
+    } catch (error) {
+      let errorMessage = 'Police registration failed';
+      
+      if (error instanceof Error) {
+        console.error('Police registration error:', error.message);
+        errorMessage = error.message;
+      }
+      
+      set({ error: errorMessage, loading: false });
+      throw new Error(errorMessage);
+    }
+  },
+
+  //Svaki sljedeci login
+  login: async (email: string, password: string) => {
+    set({ loading: true, error: null });
+    try {
+      const { accessToken, refreshToken } = await authService.login({ email, password });
+      
+      if (!accessToken || !refreshToken) {
+        throw new Error('Invalid response from server: missing tokens');
+      }
+
+      // Get existing device token from storage
+      const deviceToken = await tokenUtils.getToken(tokenUtils.DEVICE_TOKEN_KEY);
+      if (!deviceToken) {
+        throw new Error('Device not registered. Please register first.');
+      }
+
+      const userData = tokenUtils.getUserFromToken(deviceToken);
+      
+      // Update stored tokens
+      await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
+      
+      if (userData) {
+        await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
       }
       
       set({
@@ -71,49 +114,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw new Error(errorMessage);
     }
   },
-
-loginPolice: async (token: string) => {
-  set({ loading: true, error: null });
-  try {
-    const { accessToken, refreshToken, deviceToken } = await authService.loginPolice(token);
-    console.log('Received deviceToken:', deviceToken);
-    
-    if (!accessToken || !refreshToken || !deviceToken) {
-      throw new Error('Invalid response from server: missing tokens');
-    }
-  
-    const userData = tokenUtils.getUserFromToken(deviceToken);
-    await tokenUtils.storeTokens(deviceToken, accessToken, refreshToken);
-    
-    if (userData) {
-      await SecureStore.setItemAsync(tokenUtils.USER_DATA_KEY, JSON.stringify(userData));
-    }
-  
-    // Force update the store state
-    set((state) => ({
-      ...state,
-      deviceToken: deviceToken,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      userData: userData,
-      loading: false,
-      error: null
-    }));
-  
-    console.log('Current secure store deviceToken:', get().deviceToken);
-    
-  } catch (error) {
-    let errorMessage = 'Police login failed';
-    
-    if (error instanceof Error) {
-      console.error('Police login error:', error.message);
-      errorMessage = error.message;
-    }
-    
-    set({ error: errorMessage, loading: false });
-    throw new Error(errorMessage);
-  }
-},
 
   logout: async () => {
     try {
@@ -145,6 +145,16 @@ loginPolice: async (token: string) => {
       return deviceToken !== null && deviceToken !== '';
     } catch (error) {
       console.error('Error checking authentication:', error);
+      return false;
+    }
+  },
+
+  isDeviceRegistered: async () => {
+    try {
+      const deviceToken = await tokenUtils.getToken(tokenUtils.DEVICE_TOKEN_KEY);
+      return deviceToken !== null && deviceToken !== '';
+    } catch (error) {
+      console.error('Error checking device registration:', error);
       return false;
     }
   },
