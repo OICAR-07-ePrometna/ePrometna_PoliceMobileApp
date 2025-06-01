@@ -22,6 +22,9 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "permissions": [
+      "CAMERA"
+    ],
     "plugins": [
       "expo-router",
       [
@@ -31,6 +34,12 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes for vehicle identification."
         }
       ]
     ],
