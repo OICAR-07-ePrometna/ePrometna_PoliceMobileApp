@@ -14,17 +14,8 @@ export interface ScannedDataResult {
   driver: UserDto;
 }
 
-/**
- * Scans QR code and retrieves temporary data along with vehicle and driver details
- * First calls PUT to get and delete temp data, then fetches additional details
- */
 export async function scanQRCodeAndGetData(tempDataUuid: string): Promise<ScannedDataResult> {
   try {
-    console.log('Scanning QR code with UUID:', tempDataUuid);
-    
-    // Step 1: Call the PUT endpoint to get and delete temp data
-    // This should return { vehicleUuid: string, driverUuid: string }
-    console.log('Step 1: Calling PUT /tempdata/' + tempDataUuid);
     const tempDataResponse = await apiClient.put(`/tempdata/${tempDataUuid}`);
     console.log('PUT response:', tempDataResponse.data);
     
@@ -37,20 +28,14 @@ export async function scanQRCodeAndGetData(tempDataUuid: string): Promise<Scanne
 
     console.log('Temp data retrieved and deleted. Vehicle UUID:', tempData.vehicleUuid, 'Driver UUID:', tempData.driverUuid);
 
-    // Step 2: Fetch vehicle details using the UUID we got from temp data
-    console.log('Step 2: Fetching vehicle details for UUID:', tempData.vehicleUuid);
     const vehicleResponse = await apiClient.get(`/vehicle/${tempData.vehicleUuid}`);
     console.log('Vehicle response status:', vehicleResponse.status);
     const vehicle: VehicleDetailsDto = vehicleResponse.data;
 
-    // Step 3: Fetch driver details using the UUID we got from temp data  
-    console.log('Step 3: Fetching driver details for UUID:', tempData.driverUuid);
     const driverResponse = await apiClient.get(`/user/${tempData.driverUuid}`);
     console.log('Driver response status:', driverResponse.status);
     const driver: UserDto = driverResponse.data;
-
-    console.log('All data retrieved successfully');
-
+    
     return {
       tempData,
       vehicle,

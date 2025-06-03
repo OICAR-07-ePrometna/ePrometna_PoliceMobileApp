@@ -11,4 +11,5 @@ export interface User {
   email: string;
   role: UserRole;
   registeredDevice?: Mobile;
+  policeToken?: string;
 }
