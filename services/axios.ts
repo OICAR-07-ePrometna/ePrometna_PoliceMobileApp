@@ -51,10 +51,10 @@ export function getBaseUrl(): string {
         }
         break;
     }
-    
-    console.log('Base URL:', baseURL);
+  } else {
+    baseURL = Constants.expoConfig?.extra?.prodUrl;
   }
-  
+  console.log('Base URL:', baseURL);
   return baseURL;
 }
 

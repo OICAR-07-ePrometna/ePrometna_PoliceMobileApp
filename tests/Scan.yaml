@@ -1,0 +1,10 @@
+appId: com.anonymous.PoliceMobileApp
+---
+- launchApp
+- assertVisible: "Skeniraj QR"
+- assertVisible: "QR kod uspješno skeniran"
+
+- launchApp
+- assertVisible: "Skeniraj QR"
+- assertVisible: "Greška"
+- assertNotVisible: "QR kod uspješno skeniran"

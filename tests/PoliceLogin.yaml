@@ -1,0 +1,45 @@
+appId: com.anonymous.PoliceMobileApp
+---
+# Test login with valid token
+- launchApp
+- assertVisible: "Login Screen"
+- assertVisible: "Prijava Policijskog Službenika"
+
+# Test first-time registration flow
+- assertVisible: "Unesi svoj token za registraciju uređaja i prijavu policijskog službenika"
+
+# Test token input
+- tapOn: "Token character 1"
+- inputText: "A"
+- tapOn: "Token character 2"
+- inputText: "B"
+- tapOn: "Token character 3"
+- inputText: "C"
+- tapOn: "Token character 4"
+- inputText: "D"
+- tapOn: "Token character 5"
+- inputText: "E"
+- tapOn: "Token character 6"
+- inputText: "F"
+- tapOn: "Token character 7"
+- inputText: "G"
+- tapOn: "Token character 8"
+- inputText: "H"
+
+# Test login button
+- assertVisible: "Access app button"
+- tapOn: "Access app button"
+- assertVisible: "QR kod uspješno skeniran"
+
+- launchApp
+- assertVisible: "Skeniraj QR"
+- assertVisible: "Greška"
+- assertNotVisible: "QR kod uspješno skeniran"
+
+# Test paste functionality
+#- launchApp
+#- assertVisible: "Login Screen"
+#- tapOn: "Token character 1"
+#- inputText: "ABCDEFGH"
+#- assertVisible: "Access app button"
+#- tapOn: "Access app button"

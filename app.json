@@ -9,13 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.PoliceMobileApp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.PoliceMobileApp",
+      "ndkVersion": "26.1.10909125"
     },
     "web": {
       "bundler": "metro",
@@ -47,8 +54,9 @@
       "typedRoutes": true
     },
     "extra": {
-      "localIP": "192.168.68.54",
-      "emulatorIP": "10.0.2.2"
+      "localIP": "192.168.0.155",
+      "emulatorIP": "10.0.2.2",
+      "prodUrl": "https://adjusted-tarpon-engaging.ngrok-free.app/api"
     }
   }
 }
