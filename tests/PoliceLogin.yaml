@@ -29,13 +29,12 @@ appId: com.anonymous.PoliceMobileApp
 # Test login button
 - assertVisible: "Access app button"
 - tapOn: "Access app button"
+- assertVisible: "QR kod uspješno skeniran"
 
-
-# Test persistent login
 - launchApp
-- assertNotVisible: "Login Screen"
-- assertNotVisible: "Prijava Policijskog Službenika"
-- assertVisible: "Skeniraj QR" 
+- assertVisible: "Skeniraj QR"
+- assertVisible: "Greška"
+- assertNotVisible: "QR kod uspješno skeniran"
 
 # Test paste functionality
 #- launchApp
