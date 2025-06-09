@@ -46,15 +46,16 @@ appId: com.anonymous.PoliceMobileApp
 
 # DATA OVERVIEW TEST -------------------------------------------------------------------
 # open data overview
+- assertVisible: "Profil"
 - tapOn: "Profil"
 
-# verify data is visibke 
+# verify data is visible 
 - assertVisible: "Ime"
 - assertVisible: "Prezime"
 - assertVisible: "OIB"
 - assertVisible: "E-mail"
 
-# test accuracy 
+# test accuracy
 - assertVisible: "officer"
 - assertVisible: "mup Officer2"
 - assertVisible: "12308831323"
