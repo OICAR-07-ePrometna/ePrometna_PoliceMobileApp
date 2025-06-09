@@ -43,3 +43,19 @@ appId: com.anonymous.PoliceMobileApp
 #- inputText: "ABCDEFGH"
 #- assertVisible: "Access app button"
 #- tapOn: "Access app button"
+
+# DATA OVERVIEW TEST -------------------------------------------------------------------
+# open data overview
+- tapOn: "Profil"
+
+# verify data is visibke 
+- assertVisible: "Ime"
+- assertVisible: "Prezime"
+- assertVisible: "OIB"
+- assertVisible: "E-mail"
+
+# test accuracy 
+- assertVisible: "officer"
+- assertVisible: "mup Officer2"
+- assertVisible: "12308831323"
+- assertVisible: "mupOfficer2@test.hr"
