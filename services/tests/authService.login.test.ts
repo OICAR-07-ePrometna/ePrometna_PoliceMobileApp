@@ -11,7 +11,7 @@ jest.mock('@/services/axios', () => ({
   },
 }));
 
-// Mock axios error
+// Mock axios
 jest.mock('axios', () => ({
   isAxiosError: jest.fn(),
 }));

@@ -12,7 +12,7 @@ jest.mock('@/services/axios', () => ({
   },
 }));
 
-// Mock axios error
+// Mock axios
 jest.mock('axios', () => ({
   isAxiosError: jest.fn(),
 }));
@@ -21,6 +21,7 @@ jest.mock('axios', () => ({
 jest.mock('@/utilities/deviceUtils', () => ({
   getDeviceInfo: jest.fn(),
 }));
+
 
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
 const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
