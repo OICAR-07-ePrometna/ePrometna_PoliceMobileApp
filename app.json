@@ -54,7 +54,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "localIP": "192.168.0.155",
+      "localIP": "192.168.68.54",
       "emulatorIP": "10.0.2.2",
       "prodUrl": "https://adjusted-tarpon-engaging.ngrok-free.app/api"
     }

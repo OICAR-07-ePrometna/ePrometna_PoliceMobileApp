@@ -5,8 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
-  ScrollView,
-  Dimensions,
+  ScrollView
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
@@ -132,7 +131,6 @@ const QRScanner: React.FC<QRScannerProps> = ({ onBack }) => {
             onBarcodeScanned={handleQrScanned}
           >
             <View style={styles.overlay}>
-              {/* Header */}
               <View style={styles.header}>
                 {onBack && (
                   <TouchableOpacity onPress={onBack} style={styles.headerButton}>
@@ -142,7 +140,6 @@ const QRScanner: React.FC<QRScannerProps> = ({ onBack }) => {
                 <Text style={styles.headerTitle}>Skeniraj QR kod</Text>
               </View>
 
-              {/* Scanning frame */}
               <View style={styles.scanningArea}>
                 <View style={styles.scanFrame}>
                   <View style={[styles.corner, styles.topLeft]} />
@@ -152,7 +149,6 @@ const QRScanner: React.FC<QRScannerProps> = ({ onBack }) => {
                 </View>
               </View>
 
-              {/* Instructions */}
               <View style={styles.instructions}>
                 <Text style={styles.instructionText}>
                   Usmjeri kameru prema E-Prometna QR kodu
@@ -255,8 +251,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onBack }) => {
             </Card.Content>
           </Card>
 
-          {/* Additional Drivers Section */}
-          {scannedData.vehicle.drivers && scannedData.vehicle.drivers.length > 0 && (
+          {/* {scannedData.vehicle.drivers && scannedData.vehicle.drivers.length > 0 && (
             <Card style={styles.card}>
               <Card.Title
                 title="Ovlašteni vozači"
@@ -283,7 +278,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onBack }) => {
                 ))}
               </Card.Content>
             </Card>
-          )}
+          )} */}
 
           <Card style={styles.card}>
             <Card.Title

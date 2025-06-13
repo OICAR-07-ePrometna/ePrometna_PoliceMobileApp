@@ -91,7 +91,6 @@ const PoliceLoginView: React.FC = () => {
   };
 
   const handlePaste = async (text: string, index: number) => {
-    // If pasted text is longer than a single character, it might be the full token
     if (text.length > 1) {
       const pastedToken = text.slice(0, TOKEN_LENGTH);
       

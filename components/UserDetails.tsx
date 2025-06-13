@@ -75,7 +75,7 @@ const UserDetails = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Loading user details...</Text>
+        <Text style={styles.loadingText}>Učitavanje podataka o korisniku...</Text>
       </View>
     );
   }

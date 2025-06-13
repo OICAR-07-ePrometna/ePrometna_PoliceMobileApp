@@ -141,7 +141,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: async () => {
     try {
       const deviceToken = await tokenUtils.getToken(tokenUtils.DEVICE_TOKEN_KEY);
-      console.log('isAuthenticated checking device token:', deviceToken);
       return deviceToken !== null && deviceToken !== '';
     } catch (error) {
       console.error('Error checking authentication:', error);

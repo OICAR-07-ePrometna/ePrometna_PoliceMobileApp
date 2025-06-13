@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
-import { DEVICE_TOKEN_KEY, ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_DATA_KEY } from '@/utilities/tokenUtils';
+import { DEVICE_TOKEN_KEY, ACCESS_TOKEN_KEY} from '@/utilities/tokenUtils';
 
 const getExpoDebuggerIP = () => {
   try {

@@ -15,7 +15,6 @@ export interface ScannedDataResult {
 
 export async function scanQRCodeAndGetData(tempDataUuid: string): Promise<ScannedDataResult> {
   try {
-    //Call PUT to get and delete temp data
     const tempDataResponse = await apiClient.put(`/tempdata/${tempDataUuid}`);
     
     const tempData: TempDataDto = tempDataResponse.data;
@@ -24,11 +23,11 @@ export async function scanQRCodeAndGetData(tempDataUuid: string): Promise<Scanne
       throw new Error('Neispravni podaci u QR kodu');
     }
 
-    //Fetch vehicle details using the UUID
+    //Fetch vehicle details preko uuida
     const vehicleResponse = await apiClient.get(`/vehicle/${tempData.vehicleUuid}`);
     const vehicle: VehicleDetailsDto = vehicleResponse.data;
 
-    //Fetch driver details using the UUID 
+    //Fetch driver details preko uuida 
     const driverResponse = await apiClient.get(`/user/${tempData.driverUuid}`);
     const driver: UserDto = driverResponse.data;
 
